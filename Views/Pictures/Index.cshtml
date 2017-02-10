@@ -1,0 +1,62 @@
+﻿@model IEnumerable<libraryNaturguiden.Picture>
+
+@{
+    ViewBag.Title = "List All";
+}
+
+<h2>All pictures</h2>
+
+@if (ViewBag.Error != null)
+{
+    @ViewBag.Error
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Url)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Alt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Owner)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Format)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Url)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Alt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Owner)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Format)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
