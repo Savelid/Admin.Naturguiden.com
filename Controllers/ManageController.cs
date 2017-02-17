@@ -103,6 +103,7 @@ namespace adminNaturguiden.Controllers
         // GET: /Manage/AddPhoneNumber
         public ActionResult AddPhoneNumber()
         {
+            ViewBag.Role = User.IsInRole("Admin").ToString();
             return View();
         }
 

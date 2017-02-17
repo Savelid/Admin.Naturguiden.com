@@ -53,6 +53,41 @@ namespace adminNaturguiden.Controllers
         }
 
         //
+        // GET: /Account/Roles
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Roles()
+        {
+            var appContext = new ApplicationDbContext();
+            var roles = appContext.Roles.Select(x => x.Name).ToArray();
+            if (!roles.Contains("Administrator"))
+            {
+                appContext.Roles.Add(new Microsoft.AspNet.Identity.EntityFramework.IdentityRole("Administrator"));
+                appContext.SaveChanges();
+            }
+
+            var viewModel = new RoleViewModel();
+            viewModel.Roles = appContext.Roles.ToArray();
+            viewModel.Users = UserManager.Users.ToArray();
+
+            return View(viewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ChangeRole(string userId, string role)
+        {
+            if (UserManager.AddToRole(userId, role).Succeeded)
+            {
+                TempData.Add("Status", new string[] { "Added User to roll" });
+            }
+            else
+            {
+                TempData.Add("Status", UserManager.AddToRole(userId, role).Errors.ToArray());
+            }
+            return RedirectToAction(nameof(Roles));
+        }
+
+        //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)

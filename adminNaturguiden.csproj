@@ -253,6 +253,7 @@
     <Content Include="Views\PictureCategories\Create.cshtml" />
     <Content Include="Views\PictureCategories\Details.cshtml" />
     <Content Include="Views\Pictures\Edit.cshtml" />
+    <Content Include="Views\Account\Roles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

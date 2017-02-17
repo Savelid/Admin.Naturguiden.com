@@ -19,8 +19,8 @@ namespace adminNaturguiden.Models
         {
             if(client.BaseAddress == null)
             {
-                //client.BaseAddress = new Uri("http://api.naturguiden.com/");
-                client.BaseAddress = new Uri("http://localhost:5076/");
+                client.BaseAddress = new Uri("http://api.naturguiden.com/");
+                //client.BaseAddress = new Uri("http://localhost:5076/");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }

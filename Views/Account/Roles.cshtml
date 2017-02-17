@@ -1,0 +1,41 @@
+﻿@model adminNaturguiden.Models.RoleViewModel
+
+@{
+    ViewBag.Title = "Roles";
+}
+
+<h2>Roles</h2>
+<form action="/Account/ChangeRole" method="post">
+    User id
+    <input type="text" name="userId" value="" />
+    Role
+    <input type="text" name="role" value="" />
+    <input type="submit" value="Submit" />
+</form>
+Users
+<table>
+    <thead>
+        <td>Id</td><td>User Name</td><td>Roles</td>
+    </thead>
+@foreach (var item in Model.Users)
+{
+    <tr>
+        <td>@item.Id</td>
+        <td>@item.UserName</td>
+        <td>
+            @foreach (var role in item.Roles)
+            {
+                @Model.Roles.Where(x => x.Id == role.RoleId).Select(x => x.Name).FirstOrDefault()
+                <br />
+            }
+        </td>
+    </tr>
+}
+</table>
+Roles
+<ul>
+@foreach (var item in Model.Roles)
+{
+    <li>@item.Name</li>
+}
+</ul>

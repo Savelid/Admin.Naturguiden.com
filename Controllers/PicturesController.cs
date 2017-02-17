@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace adminNaturguiden.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class PicturesController : Controller
     {
 

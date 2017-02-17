@@ -3,6 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace adminNaturguiden.Models
 {
+    public class RoleViewModel
+    {
+        public ApplicationUser[] Users { get; set; }
+        public Microsoft.AspNet.Identity.EntityFramework.IdentityRole[] Roles { get; set; }
+    }
+
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
