@@ -182,6 +182,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PictureGroup.cs" />
     <Compile Include="Models\PictureHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -245,13 +246,13 @@
     <Content Include="Views\Pictures\Details.cshtml" />
     <Content Include="Views\Pictures\Create.cshtml" />
     <Content Include="Views\Pictures\Delete.cshtml" />
-    <Content Include="Views\Pictures\Edit.cshtml" />
     <Content Include="Views\Pictures\UploadImage.cshtml" />
     <Content Include="Views\PictureCategories\Index.cshtml" />
     <Content Include="Views\PictureCategories\Edit.cshtml" />
     <Content Include="Views\PictureCategories\Delete.cshtml" />
     <Content Include="Views\PictureCategories\Create.cshtml" />
     <Content Include="Views\PictureCategories\Details.cshtml" />
+    <Content Include="Views\Pictures\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

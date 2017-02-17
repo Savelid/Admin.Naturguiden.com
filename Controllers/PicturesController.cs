@@ -18,11 +18,30 @@ namespace adminNaturguiden.Controllers
            
             return returnStr;
         }
+        [HttpPost]
+        public async Task<ActionResult> ReformatPicture(libraryNaturguiden.Picture picture)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var status = await PictureHandler.ReformatPictureAsync(picture);
+                    TempData["Message"] = status.ToString();
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Error = e.Message;
+                }
+            }
+
+            return RedirectToAction(nameof(Edit), new { id = picture.Id});
+        }
 
         // GET: Pictures
         public async Task<ActionResult> Index()
         {
             var pictures = await PictureHandler.GetPicturesAsync();
+            ViewBag.Message = (string)TempData["Message"];
             return View(pictures);
         }
 
@@ -34,21 +53,24 @@ namespace adminNaturguiden.Controllers
         }
 
         // GET: Pictures/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            var viewModel = new PictureGroup();
+            viewModel.Categories = await PictureHandler.GetCategoriesAsync();
+            viewModel.Formats = new string[] { "Album", "News" };
+            return View(viewModel);
         }
 
         // POST: Pictures/Create
         [HttpPost]
-        public async Task<ActionResult> Create(libraryNaturguiden.Picture picture)
+        public async Task<ActionResult> Create(PictureGroup model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var status = await PictureHandler.CreatePictureAsync(picture);
-
+                    var status = await PictureHandler.CreatePictureAsync(model.Picture);
+                    TempData["Message"] = status.ToString();
                     return RedirectToAction("Index");
                 }
                 catch(Exception e)
@@ -58,7 +80,7 @@ namespace adminNaturguiden.Controllers
                 }
             }
             ViewBag.Error = "One or more fields was not filled in correctley";
-            return View(picture);
+            return View(model);
         }
 
         // GET: Pictures/Edit/5
@@ -77,7 +99,7 @@ namespace adminNaturguiden.Controllers
                 try
                 {
                     var status = await PictureHandler.UpdatePictureAsync(picture);
-
+                    TempData["Message"] = status.ToString();
                     return RedirectToAction("Index");
                 }
                 catch (Exception e)
@@ -103,8 +125,8 @@ namespace adminNaturguiden.Controllers
         {
             try
             {
-                await PictureHandler.DeletePictureAsync(id);
-
+                var status = await PictureHandler.DeletePictureAsync(id);
+                TempData["Message"] = status.ToString();
                 return RedirectToAction("Index");
             }
             catch (Exception e)

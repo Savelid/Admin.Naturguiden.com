@@ -19,7 +19,8 @@ namespace adminNaturguiden.Models
         {
             if(client.BaseAddress == null)
             {
-                client.BaseAddress = new Uri("http://api.naturguiden.com/");
+                //client.BaseAddress = new Uri("http://api.naturguiden.com/");
+                client.BaseAddress = new Uri("http://localhost:5076/");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }
@@ -34,9 +35,9 @@ namespace adminNaturguiden.Models
             {
                 newFileName = Guid.NewGuid().ToString() + "_" +
                 Path.GetFileName(webImage.FileName);
-                imagePath = @"images\" + newFileName;
+                imagePath = @"images/" + newFileName;
 
-                webImage.Save(@"~\" + imagePath);
+                webImage.Save(@"~/" + imagePath);
 
                 return imagePath;
             }
@@ -72,11 +73,45 @@ namespace adminNaturguiden.Models
 
         public static async Task<HttpStatusCode> CreatePictureAsync(libraryNaturguiden.Picture picture)
         {
+            FormatPicture(picture);
+
             Setup();
             HttpResponseMessage response = await client.PostAsJsonAsync("api/Picture", picture);
             response.EnsureSuccessStatusCode();
 
             return response.StatusCode;
+        }
+
+        public static async Task<HttpStatusCode> ReformatPictureAsync(libraryNaturguiden.Picture picture)
+        {
+            FormatPicture(picture);
+
+            Setup();
+            HttpResponseMessage response = await client.PutAsJsonAsync($"api/Picture/{picture.Id}", picture);
+            response.EnsureSuccessStatusCode();
+
+            return response.StatusCode;
+        }
+
+        private static void FormatPicture(Picture picture)
+        {
+            WebImage img = new WebImage(@"C:/Users/Administrator/Documents/Webprojects/adminNaturguiden/" + picture.Url);
+            var imgThumb = img.Clone();
+            var imgFormated = img.Clone();
+            imgThumb.Resize(606, 406, false, false);
+            imgThumb.Crop(3, 3, 3, 3);
+            imgFormated.Resize(1806, 1206, true, true);
+            imgFormated.Crop(3, 3, 3, 3);
+
+            var filename = picture.Url.Split('/');
+            picture.FileName = filename.LastOrDefault();
+
+            picture.ThumbUrl = "images/album/thumbs/" + picture.FileName;
+            picture.FormatedUrl = "images/album/" + picture.FileName;
+            imgThumb.Save("../" + picture.ThumbUrl);
+            imgFormated.Save("../" + picture.FormatedUrl);
+
+            picture.FileName = picture.FileName.Substring(37);
         }
 
         public static async Task<HttpStatusCode> UpdatePictureAsync(libraryNaturguiden.Picture picture)

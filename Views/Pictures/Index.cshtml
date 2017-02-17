@@ -8,7 +8,11 @@
 
 @if (ViewBag.Error != null)
 {
-    @ViewBag.Error
+    <p class="alert-warning" style="padding: 10px;">@ViewBag.Error</p>
+}
+@if (ViewBag.Message != null && ViewBag.Message != "")
+{
+    <p class="alert-warning" style="padding: 10px;">@ViewBag.Message</p>
 }
 
 <p>

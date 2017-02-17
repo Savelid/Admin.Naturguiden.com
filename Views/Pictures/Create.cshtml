@@ -1,4 +1,4 @@
-﻿@model libraryNaturguiden.Picture
+﻿@model adminNaturguiden.Models.PictureGroup
 
 @{
     ViewBag.Title = "Create";
@@ -11,115 +11,123 @@
     @ViewBag.Error
 }
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Picture</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Url, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Picture.Url, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Url, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Picture.Url, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Picture.Url, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Alt, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Picture.Alt, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Alt, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Alt, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Picture.Alt, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Picture.Alt, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Picture.Date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Picture.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Picture.Date, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Owner, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Picture.Owner, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Owner, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Owner, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Picture.Owner, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Picture.Owner, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Picture.Format, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @{ 
-
-                    //TODO: Wrong place to do this
-
-                    var nisse = new List<SelectListItem>();
-
-                    nisse.Add(new SelectListItem
+                @{
+                    var formats = new List<SelectListItem>();
+                    for (int i = 0; i < Model?.Formats?.Length; i++)
                     {
-                        Value = "Album",
-                        Text = "Album",
-                        Selected = true
-                    });
-                    nisse.Add(new SelectListItem
-                    {
-                        Value = "News",
-                        Text = "News",
-                        Selected = false
-                    });
+                        formats.Add(new SelectListItem
+                        {
+                            Value = Model.Formats[i],
+                            Text = Model.Formats[i],
+                            Selected = i == 0
+                        });
+                    }
                 }
-                @Html.DropDownListFor(model => model.Format, nisse, htmlAttributes: new { @class = "form-control" } )
-                @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
-                @Html.
+                @Html.DropDownListFor(model => model.Picture.Format, formats, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Picture.Format, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="col-md-10">
+                @{
+                    for (int i = 0; i < Model?.Categories?.Length; i++)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input name="Picture.Categories" type="checkbox" value="@Model.Categories[i].Id" />
+                                @Model.Categories[i].Name
+                            </label>
+                        </div>
+                    }
+                }
             </div>
-        </div>
-    </div>
-}
+            </div>
 
-<form id="testform">
-    <input type="file" id="file" name="file">
-    <input type="submit">
-</form>
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.js"></script>
-<script>
-
-    $('#testform').submit(function (e) {
-        var data;
-
-        data = new FormData();
-        data.append( 'file', $( '#file' )[0].files[0] );
-
-        $.ajax({
-            url: 'http://localhost:9946/Pictures/UploadImage',
-            data: data,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            success: function ( data ) {
-                $('#Url').val(data);
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
             }
-        });
 
-        e.preventDefault();
-    });
+            <form id="testform">
+                <input type="file" id="file" name="file">
+                <input type="submit">
+            </form>
+            <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.js"></script>
+            <script>
 
-</script>
+                $('#testform').submit(function (e) {
+                    var data;
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+                    data = new FormData();
+                    data.append('file', $('#file')[0].files[0]);
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+                    $.ajax({
+                        url: 'http://localhost:9946/Pictures/UploadImage',
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        success: function (data) {
+                            $('#Picture_Url').val(data);
+                        }
+                    });
+
+                    e.preventDefault();
+                });
+
+            </script>
+
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }

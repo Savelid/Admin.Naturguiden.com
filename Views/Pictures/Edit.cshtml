@@ -6,13 +6,7 @@
 
 <h2>Edit</h2>
 
-@if (ViewBag.Error != null)
-{
-    @ViewBag.Error
-}
-
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "Pictures", FormMethod.Post, htmlAttributes: new { @id = "myForm" }))
 {
     @Html.AntiForgeryToken()
     
@@ -23,10 +17,34 @@
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
+            @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FileName, new { htmlAttributes = new { @disabled = "disabled", @readonly = "readonly", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FileName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             @Html.LabelFor(model => model.Url, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Url, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FormatedUrl, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FormatedUrl, new { htmlAttributes = new { @disabled = "disabled", @readonly = "readonly", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FormatedUrl, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ThumbUrl, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ThumbUrl, new { htmlAttributes = new { @disabled = "disabled", @readonly = "readonly", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ThumbUrl, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -65,15 +83,20 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
+                <input type="button" value="Reformat picture" class="btn" id="reformatBtn" />
             </div>
         </div>
     </div>
 }
+<script>
+    document.getElementById("reformatBtn").onclick = function () {
+        console.log("hejdå");
+        var form = document.getElementById("myForm");
+        form.action = "/Pictures/ReformatPicture";
+        form.submit();
+    };
+</script>
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
