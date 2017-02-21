@@ -63,18 +63,21 @@
             @Html.LabelFor(model => model.Picture.Format, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @{
-                    var formats = new List<SelectListItem>();
-                    for (int i = 0; i < Model.Formats.Length; i++)
+                    if (Model.Formats != null)
                     {
-                        formats.Add(new SelectListItem
+                        var formats = new List<SelectListItem>();
+                        for (int i = 0; i < Model.Formats.Length; i++)
                         {
-                            Value = Model.Formats[i],
-                            Text = Model.Formats[i],
-                            Selected = i == 0
-                        });
+                            formats.Add(new SelectListItem
+                            {
+                                Value = Model.Formats[i],
+                                Text = Model.Formats[i],
+                                Selected = i == 0
+                            });
+                        }
+                        @Html.DropDownListFor(model => model.Picture.Format, formats, htmlAttributes: new { @class = "form-control" })
                     }
                 }
-                @Html.DropDownListFor(model => model.Picture.Format, formats, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Picture.Format, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -82,14 +85,17 @@
         <div class="form-group">
             <div class="col-md-10">
                 @{
-                    for (int i = 0; i < Model.Categories.Length; i++)
+                    if (Model.Categories != null)
                     {
-                        <div class="checkbox">
-                            <label>
-                                <input name="Picture.Categories" type="checkbox" value="@Model.Categories[i].Id" />
-                                @Model.Categories[i].Name
-                            </label>
-                        </div>
+                        for (int i = 0; i < Model.Categories.Length; i++)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input name="Picture.Categories" type="checkbox" value="@Model.Categories[i].Id" />
+                                    @Model.Categories[i].Name
+                                </label>
+                            </div>
+                        }
                     }
                 }
             </div>

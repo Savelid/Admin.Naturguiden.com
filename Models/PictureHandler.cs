@@ -116,9 +116,41 @@ namespace adminNaturguiden.Models
 
         public static async Task<HttpStatusCode> DeletePictureAsync(int id)
         {
+            libraryNaturguiden.Picture picture = null;
             Setup();
-            HttpResponseMessage response = await client.DeleteAsync($"api/Picture/{id}");
+            HttpResponseMessage response = await client.GetAsync("api/Picture/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                picture = await response.Content.ReadAsAsync<libraryNaturguiden.Picture>();
+                response = await client.DeleteAsync($"api/Picture/{id}");
+            }
+            if (response.IsSuccessStatusCode)
+            {
+                removePictureFromDisc(picture);
+            }
             return response.StatusCode;
+        }
+
+        private static void removePictureFromDisc(Picture picture)
+        {
+            var baseUrl = System.Web.HttpContext.Current.Server.MapPath("~");
+            try
+            {
+                FileInfo thumb = new FileInfo(baseUrl + picture.ThumbUrl);
+                if(thumb.Exists)
+                    thumb.Delete();
+                FileInfo formated = new FileInfo(baseUrl + picture.FormatedUrl);
+                if (formated.Exists)
+                    formated.Delete();
+                FileInfo orginal = new FileInfo(baseUrl + picture.Url);
+                if (orginal.Exists)
+                    orginal.Delete();
+            }
+            catch (Exception e)
+            {
+                var message = e.Message;
+                throw e;
+            }
         }
 
         public static async Task<libraryNaturguiden.PictureCategory[]> GetCategoriesAsync()
