@@ -15,6 +15,11 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.FileName)
+        @Html.HiddenFor(model => model.Url)
+        @Html.HiddenFor(model => model.ThumbUrl)
+        @Html.HiddenFor(model => model.FormatedUrl)
+        @Html.HiddenFor(model => model.Format)
 
         <div class="form-group">
             @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -27,7 +32,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Url, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Url, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Url, new { htmlAttributes = new { @disabled = "disabled", @readonly = "readonly", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -75,7 +80,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Format, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Format, new { htmlAttributes = new { @disabled = "disabled", @readonly = "readonly", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -83,19 +88,10 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
-                <input type="button" value="Reformat picture" class="btn" id="reformatBtn" />
             </div>
         </div>
     </div>
 }
-<script>
-    document.getElementById("reformatBtn").onclick = function () {
-        console.log("hejdå");
-        var form = document.getElementById("myForm");
-        form.action = "/Pictures/ReformatPicture";
-        form.submit();
-    };
-</script>
 
 <div>
     @Html.ActionLink("Back to List", "Index")

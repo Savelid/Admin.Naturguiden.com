@@ -4,53 +4,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace adminNaturguiden.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class PicturesController : Controller
+    public class NewsController : Controller
     {
-
         // GET: Pictures
         public async Task<ActionResult> Index()
         {
-            var pictures = await PictureHandler.GetPicturesAsync();
-            ViewBag.Message = (string)TempData["Message"];
-            return View(pictures);
+            var model = await NewsHandler.GetNewsAsync();
+            return View(model);
         }
 
         // GET: Pictures/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var picture = await PictureHandler.GetPictureAsync(id);
-            return View(picture);
+            var model = await NewsHandler.GetNewsAsync(id);
+            return View(model);
         }
 
         // GET: Pictures/Create
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
-            var viewModel = new PictureGroup();
-            viewModel.Categories = await PictureHandler.GetCategoriesAsync();
-            viewModel.Formats = new string[] { "Album", "News" };
-            return View(viewModel);
+            return View();
         }
 
         // POST: Pictures/Create
         [HttpPost]
-        public async Task<ActionResult> Create(PictureGroup model)
+        public async Task<ActionResult> Create(libraryNaturguiden.News model)
         {
-            var img = WebImage.GetImageFromRequest();
-            if (ModelState.IsValid && img != null)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    var status = await PictureHandler.CreatePictureAsync(model.Picture, img);
-                    TempData["Message"] = status.ToString();
+                    var status = await NewsHandler.CreateNewsAsync(model);
+
                     return RedirectToAction("Index");
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     ViewBag.Error = e.Message;
                     return View(model);
@@ -63,53 +56,53 @@ namespace adminNaturguiden.Controllers
         // GET: Pictures/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var picture = await PictureHandler.GetPictureAsync(id);
-            return View(picture);
+            var model = await NewsHandler.GetNewsAsync(id);
+            return View(model);
         }
 
         // POST: Pictures/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(int id, libraryNaturguiden.Picture picture)
+        public async Task<ActionResult> Edit(int id, libraryNaturguiden.News model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var status = await PictureHandler.UpdatePictureAsync(picture);
-                    TempData["Message"] = status.ToString();
+                    var status = await NewsHandler.UpdateNewsAsync(model);
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception e)
                 {
                     ViewBag.Error = e.Message;
-                    return View();
+                    return View(model);
                 }
             }
             ViewBag.Error = "One or more fields was not filled in correctley";
-            return View(picture);
+            return View(model);
         }
 
         // GET: Pictures/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var picture = await PictureHandler.GetPictureAsync(id);
-            return View(picture);
+            var model = await NewsHandler.GetNewsAsync(id);
+            return View(model);
         }
 
         // POST: Pictures/Delete/5
         [HttpPost]
-        public async Task<ActionResult> Delete(int id, libraryNaturguiden.Picture picture)
+        public async Task<ActionResult> Delete(int id, libraryNaturguiden.News model)
         {
             try
             {
-                var status = await PictureHandler.DeletePictureAsync(id);
-                TempData["Message"] = status.ToString();
+                await NewsHandler.DeleteNewsAsync(id);
+
                 return RedirectToAction("Index");
             }
             catch (Exception e)
             {
                 ViewBag.Error = e.Message;
-                return View();
+                return View(model);
             }
         }
     }

@@ -72,7 +72,7 @@ namespace adminNaturguiden.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult ChangeRole(string userId, string role)
         {
